@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathFinder | Luxury RIASEC Assessment</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #6d28d9;
+            --gold: #fbbf24;
+            --deep-bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .gold-text {
+            background: linear-gradient(to bottom, #fde68a, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+        }
+
+        .btn-luxury {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #1e1b4b;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-luxury:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5);
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-ai:hover:not(:disabled) {
+            filter: brightness(1.2);
+            transform: scale(1.02);
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gold);
+            transition: width 0.5s ease;
+        }
+
+        #screens > div {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        #screens > div.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        .spinner {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top: 2px solid var(--gold);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="particles-container" class="fixed inset-0 pointer-events-none"></div>
+
+    <div id="app" class="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div id="screens" class="w-full max-w-4xl">
+            
+            <!-- 1. START SCREEN -->
+            <div id="screen-start" class="active text-center">
+                <h1 class="text-6xl md:text-8xl font-bold gold-text mb-6">PathFinder</h1>
+                <p class="text-xl text-indigo-200 mb-10 max-w-lg mx-auto font-light">
+                    Temukan masa depan Anda melalui analisis minat bakat RIASEC yang didukung oleh kecerdasan buatan.
+                </p>
+                <div class="glass-card p-8 md:p-10 max-w-md mx-auto">
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center gap-4 text-left">
+                            <span class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">01</span>
+                            <p class="text-sm">30 Pertanyaan Psikometri</p>
+                        </div>
+                        <div class="flex items-center gap-4 text-left">
+                            <span class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">02</span>
+                            <p class="text-sm">Analisis 6 Dimensi Kepribadian</p>
+                        </div>
+                        <div class="flex items-center gap-4 text-left">
+                            <span class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 font-bold">03</span>
+                            <p class="text-sm">Produk Kelompok 5</p>
+                        </div>
+                    </div>
+                    <button onclick="showScreen('screen-auth')" class="btn-luxury w-full py-4 rounded-xl text-lg uppercase tracking-widest">
+                        Mulai Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. AUTH SCREEN -->
+            <div id="screen-auth" class="max-w-md mx-auto">
+                <div class="glass-card p-10">
+                    <h2 class="text-3xl font-bold mb-2">Siapa Anda?</h2>
+                    <p class="text-indigo-300/60 mb-8 text-sm">Identitas Anda membantu AI memberikan saran yang lebih personal.</p>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-amber-500 mb-2">Nama Lengkap</label>
+                            <input type="text" id="user-name" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 focus:outline-none focus:border-amber-500 transition-all text-white" placeholder="Contoh: Budi Pratama">
+                        </div>
+                        <button onclick="initTest()" class="btn-luxury w-full py-4 rounded-xl">Lanjutkan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. TEST SCREEN -->
+            <div id="screen-test">
+                <div class="flex justify-between items-center mb-4 px-2">
+                    <span id="progress-text" class="text-xs font-bold text-amber-500 uppercase tracking-widest">Soal 1 / 30</span>
+                    <span id="cat-indicator" class="text-xs italic opacity-40">Kategori: Realistic</span>
+                </div>
+                <div class="progress-bar mb-10">
+                    <div id="progress-fill" class="progress-fill" style="width: 3.33%"></div>
+                </div>
+
+                <div class="glass-card p-8 md:p-14 text-center">
+                    <h3 id="question-text" class="text-2xl md:text-3xl font-semibold mb-12 leading-snug">
+                        ...
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                        <button onclick="handleAnswer(1)" class="option-btn p-4 rounded-xl text-xs">Sangat Tidak Setuju</button>
+                        <button onclick="handleAnswer(2)" class="option-btn p-4 rounded-xl text-xs">Tidak Setuju</button>
+                        <button onclick="handleAnswer(3)" class="option-btn p-4 rounded-xl text-xs">Ragu-ragu</button>
+                        <button onclick="handleAnswer(4)" class="option-btn p-4 rounded-xl text-xs">Setuju</button>
+                        <button onclick="handleAnswer(5)" class="option-btn p-4 rounded-xl text-xs">Sangat Setuju</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. RESULT SCREEN -->
+            <div id="screen-result">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl font-bold gold-text mb-2">Analisis Potensi Anda</h2>
+                    <p id="res-greeting" class="text-indigo-200/60 font-light">Laporan hasil tes minat bakat.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Profile Card -->
+                    <div class="lg:col-span-1 glass-card p-8 text-center flex flex-col items-center">
+                        <div id="top-icon" class="w-24 h-24 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 text-amber-500 text-4xl">
+                            🛠️
+                        </div>
+                        <h3 id="top-name" class="text-3xl font-bold mb-2">Realistic</h3>
+                        <p class="text-xs uppercase tracking-widest text-amber-500 font-bold mb-4">Profil Dominan</p>
+                        <p id="top-desc" class="text-sm text-indigo-200/80 leading-relaxed mb-6">
+                            Deskripsi profil Anda akan muncul di sini.
+                        </p>
+                        
+                        <button id="ai-btn" onclick="requestGeminiAnalysis()" class="btn-ai w-full py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+                            <span>Analisis Gemini AI ✨</span>
+                            <div id="ai-spinner" class="hidden"><span class="spinner"></span></div>
+                        </button>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="glass-card p-8">
+                            <h4 class="text-lg font-bold mb-6 flex items-center gap-2">
+                                <span class="w-1 h-6 bg-amber-500 rounded-full"></span>
+                                Rekomendasi Karier & Studi
+                            </h4>
+                            <div id="career-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                <!-- JS Injected -->
+                            </div>
+                        </div>
+
+                        <!-- Gemini Box -->
+                        <div id="ai-box" class="hidden glass-card p-8 border-indigo-500/30 border-2 animate-pulse-slow">
+                            <h4 class="text-lg font-bold mb-4 flex items-center gap-2 text-indigo-300">
+                                ✨ Deep Coaching AI
+                            </h4>
+                            <div id="ai-text" class="text-sm leading-relaxed text-indigo-100 whitespace-pre-line">
+                                <!-- AI Content -->
+                            </div>
+                        </div>
+
+                        <!-- Stats Bar -->
+                        <div class="glass-card p-8">
+                            <h4 class="text-lg font-bold mb-6">Spektrum Skor RIASEC</h4>
+                            <div id="stat-bars" class="space-y-4">
+                                <!-- JS Injected -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center">
+                    <button onclick="location.reload()" class="opacity-30 hover:opacity-100 transition-all text-xs underline">Ulangi Tes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; // API Key disediakan otomatis
+        let currentIdx = 0;
+        let userName = "";
+        let scores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+
+        const questions = [
+            { t: "Saya senang merakit atau memperbaiki peralatan mekanik.", c: "R" },
+            { t: "Saya suka melakukan eksperimen ilmiah untuk mencari tahu cara kerja sesuatu.", c: "I" },
+            { t: "Saya senang melukis, menggambar, atau membuat karya seni.", c: "A" },
+            { t: "Saya senang membantu orang lain menyelesaikan masalah pribadi mereka.", c: "S" },
+            { t: "Saya suka memimpin tim dan memberikan arahan kepada orang lain.", c: "E" },
+            { t: "Saya senang menyusun dokumen atau file secara teratur.", c: "C" },
+            { t: "Saya lebih suka bekerja di luar ruangan daripada di kantor.", c: "R" },
+            { t: "Saya senang memecahkan teka-teki logika yang sulit.", c: "I" },
+            { t: "Saya suka menulis cerita pendek atau artikel kreatif.", c: "A" },
+            { t: "Saya senang mengajar atau menjelaskan sesuatu kepada orang lain.", c: "S" },
+            { t: "Saya suka bernegosiasi dan meyakinkan orang lain.", c: "E" },
+            { t: "Saya sangat teliti terhadap detail angka dalam laporan.", c: "C" },
+            { t: "Saya suka mengoperasikan mesin atau peralatan berat.", c: "R" },
+            { t: "Saya senang membaca jurnal ilmiah terbaru.", c: "I" },
+            { t: "Saya menikmati bermain alat musik atau bernyanyi.", c: "A" },
+            { t: "Saya tertarik pada isu-isu sosial dan kemanusiaan.", c: "S" },
+            { t: "Saya bercita-cita memiliki bisnis atau perusahaan sendiri.", c: "E" },
+            { t: "Saya senang mengikuti prosedur kerja yang terstruktur.", c: "C" },
+            { t: "Saya senang membangun sesuatu dari kayu atau logam.", c: "R" },
+            { t: "Saya senang melakukan riset data atau penelitian pasar.", c: "I" },
+            { t: "Saya suka mendesain tata letak ruangan atau grafis.", c: "A" },
+            { t: "Saya merasa puas ketika bisa meringankan beban orang lain.", c: "S" },
+            { t: "Saya berani mengambil risiko untuk keuntungan bisnis.", c: "E" },
+            { t: "Saya senang membuat jadwal kerja yang sangat detail.", c: "C" },
+            { t: "Saya suka aktivitas fisik yang menantang kekuatan.", c: "R" },
+            { t: "Saya senang menganalisis perilaku manusia secara ilmiah.", c: "I" },
+            { t: "Saya senang mengekspresikan ide dengan cara unik.", c: "A" },
+            { t: "Saya senang bekerja di lembaga pelayanan masyarakat.", c: "S" },
+            { t: "Saya senang berbicara di depan umum dalam sebuah rapat.", c: "E" },
+            { t: "Saya lebih suka bekerja dengan data daripada orang banyak.", c: "C" }
+        ];
+
+        const metaData = {
+            R: { n: "Realistic", i: "🛠️", d: "Anda praktis dan suka bekerja dengan alat atau mesin.", c: ["Teknik Mesin", "Arsitek", "IT Support", "Pilot"] },
+            I: { n: "Investigative", i: "🔬", d: "Anda analitis dan suka memecahkan masalah kompleks.", c: ["Ilmuwan", "Data Analyst", "Programmer", "Dokter"] },
+            A: { n: "Artistic", i: "🎨", d: "Anda kreatif, ekspresif, dan memiliki imajinasi tinggi.", c: ["Desainer", "Penulis", "Musisi", "Content Creator"] },
+            S: { n: "Social", i: "🤝", d: "Anda peduli dan senang membantu orang lain berkembang.", c: ["Guru", "HRD", "Psikolog", "Tenaga Medis"] },
+            E: { n: "Enterprising", i: "📈", d: "Anda ambisius, persuasif, dan pandai memimpin.", c: ["Entrepreneur", "Manajer", "Advokat", "Public Relations"] },
+            C: { n: "Conventional", i: "📋", d: "Anda terorganisir, teliti, dan menyukai keteraturan.", c: ["Akuntan", "Auditor", "Admin Data", "Analyst Keuangan"] }
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('#screens > div').forEach(d => d.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function initTest() {
+            userName = document.getElementById('user-name').value.trim();
+            if(!userName) return;
+            showScreen('screen-test');
+            updateUI();
+        }
+
+        function updateUI() {
+            const q = questions[currentIdx];
+            document.getElementById('question-text').innerText = q.t;
+            document.getElementById('progress-text').innerText = `Soal ${currentIdx + 1} / ${questions.length}`;
+            document.getElementById('progress-fill').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
+            
+            const cats = {R: "Realistic", I: "Investigative", A: "Artistic", S: "Social", E: "Enterprising", C: "Conventional"};
+            document.getElementById('cat-indicator').innerText = `Kategori: ${cats[q.c]}`;
+        }
+
+        function handleAnswer(val) {
+            const cat = questions[currentIdx].c;
+            scores[cat] += val;
+
+            if(currentIdx < questions.length - 1) {
+                currentIdx++;
+                updateUI();
+            } else {
+                renderResults();
+            }
+        }
+
+        function renderResults() {
+            const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+            const topKey = sorted[0][0];
+            const profile = metaData[topKey];
+
+            document.getElementById('res-greeting').innerText = `Halo ${userName}, ini adalah profil masa depan Anda.`;
+            document.getElementById('top-name').innerText = profile.n;
+            document.getElementById('top-icon').innerText = profile.i;
+            document.getElementById('top-desc').innerText = profile.d;
+
+            const cBox = document.getElementById('career-container');
+            cBox.innerHTML = '';
+            profile.c.forEach(c => {
+                cBox.innerHTML += `<div class="p-3 bg-white/5 border border-white/10 rounded-lg">${c}</div>`;
+            });
+
+            const sBox = document.getElementById('stat-bars');
+            sBox.innerHTML = '';
+            sorted.forEach(([k, v]) => {
+                const perc = (v / 25) * 100;
+                sBox.innerHTML += `
+                    <div>
+                        <div class="flex justify-between text-[10px] mb-1">
+                            <span>${metaData[k].n}</span>
+                            <span class="text-amber-500 font-bold">${Math.round(perc)}%</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500" style="width: ${perc}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            showScreen('screen-result');
+        }
+
+        async function requestGeminiAnalysis() {
+            const btn = document.getElementById('ai-btn');
+            const spinner = document.getElementById('ai-spinner');
+            const aiBox = document.getElementById('ai-box');
+            const aiText = document.getElementById('ai-text');
+
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            aiBox.classList.remove('hidden');
+            aiText.innerText = "Gemini sedang membaca pola kepribadian Anda...";
+
+            const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+            const profileStr = sorted.slice(0, 3).map(([k, v]) => `${metaData[k].n} (${v}/25)`).join(', ');
+
+            const prompt = `Nama saya ${userName}. Skor RIASEC saya adalah: ${profileStr}. 
+            Tolong berikan:
+            1. Analisis mendalam karakter saya.
+            2. 3 Rekomendasi karier modern yang spesifik (misal: Prompt Engineer, UX Researcher).
+            3. Satu kutipan motivasi penutup.
+            Gunakan Bahasa Indonesia yang elegan dan profesional.`;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
