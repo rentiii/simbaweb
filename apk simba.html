@@ -1,0 +1,394 @@
+<think>
+Here's a thinking process that leads to the suggested code and design for the Career Interest Test application:
+
+1.  **Understand the Goal:** The user wants a complete code structure for a "Talent/Interest Test Application" (Tes Minat Bakat). The key requirements are:
+    *   **Design:** Very attractive, luxurious background colors.
+    *   **Structure:** Start screen, content (questions), and finishing (results).
+    *   **Logic:** Based on the user's description (RIASEC model, Planning, UI/UX, Tech Stack, etc.).
+    *   **Format:** A coding example that is complete and sensible.
+
+2.  **Analyze the Request:**
+    *   *Input:* A detailed project plan (A to E) describing the logic, UI/UX, tech stack, and deployment.
+    *   *Constraint:* The user is asking for "coding."
+    *   *Challenge:* Providing a *fully functional*, production-ready backend + frontend + database in a single chat response is impossible due to length limits and complexity.
+    *   *Solution:* I need to provide a *high-fidelity prototype* using HTML/CSS/JavaScript (Frontend) that demonstrates the "Luxurious Design" and "Logic" requested. I will simulate the backend logic within the frontend code (using local storage or simple JS variables) so the user can run it immediately in a browser. This provides immediate gratification and visual validation of the "luxurious" requirement.
+
+3.  **Design Concept (The "Luxurious" Look):**
+    *   *Color Palette:* Deep gradients. Gold, Purple, Midnight Blue, or Black/Dark Grey with Neon accents. Let's go with a "Premium Dark Mode" aesthetic: Dark background (very dark blue/black) with Gold/Amber gradients for buttons and highlights. This screams "expensive" and "professional."
+    *   *Typography:* Clean sans-serif (Poppins or Montserrat).
+    *   *Animations:* Smooth transitions, fade-ins, hover effects.
+
+4.  **Application Flow (to be coded):**
+    *   **Screen 1: Welcome/Start:** Big title, attractive description, "Start Test" button.
+    *   **Screen 2: User Info (Optional but good):** Name input.
+    *   **Screen 3: The Quiz:** One question at a time or a list. Let's do "One question at a time" for better UX.
+    *   **Screen 4: Result:** RIASEC chart (visualized simply) + Career Recommendation.
+
+5.  **Drafting the Content (The "Brain"):**
+    *   Need a simplified set of RIASEC questions. (Realistic, Investigative, Artistic, Social, Enterprising, Conventional).
+    *   *Example:* "I like fixing things" -> Realistic. "I like art" -> Artistic.
+
+6.  **Coding Steps (HTML/CSS/JS):**
+
+    *   **HTML Structure:**
+        *   Container for the app.
+        *   Sections (hidden/shown via JS): `start-screen`, `form-screen`, `quiz-screen`, `result-screen`.
+
+    *   **CSS (The Styling):**
+        *   *Background:* `linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)` mixed with gold accents.
+        *   *Glassmorphism:* Semi-transparent backgrounds for cards (`rgba(255, 255, 255, 0.1)`).
+        *   *Buttons:* Gradient gold/orange with shadow.
+
+    *   **JavaScript (The Logic):**
+        *   *Data:* Array of objects for questions `{ text, category }`.
+        *   *State:* `currentQuestionIndex`, `scores = { R:0, I:0, ... }`.
+        *   *Functions:* `startApp()`, `loadQuestion()`, `selectOption()`, `calculateResult()`, `showResult()`.
+        *   *Result Logic:* Find the highest score. Map to career paths.
+
+7.  **Refining the Code (Self-Correction during drafting):**
+    *   *Initial thought:* Use React.
+    *   *Correction:* Setting up React requires Node.js environment. The user likely wants to see the result *now*. A single HTML file containing CSS and JS is the best delivery method for a "show me code" prompt like this.
+    *   *Design tweak:* Ensure the "Luxurious" part is prominent. Use fonts from Google Fonts.
+
+8.  **Structuring the Response:**
+    *   **Introduction:** Acknowledge the detailed plan provided by the user.
+    *   **The Solution:** Explain that since a full full-stack (DB + Backend + Frontend) is too large for one snippet, I will provide a **High-Fidelity Single Page Application (SPA)** that runs in the browser but mimics the full experience.
+    *   **The Code:** Provide the HTML/CSS/JS block.
+    *   **Explanation:** Briefly explain how the code maps to their requirements (RIASEC logic, UI design, etc.).
+    *   **Next Steps:** Advice on how to turn this into a real app (Backend integration).
+
+9.  **Writing the Code (Mental Draft & specific implementation details):**
+    *   *CSS:* Use `background: linear-gradient(to right, #141e30, #243b55);` (Dark luxury). Buttons: `#ffd700` (Gold).
+    *   *JS:* Need a simple mapping:
+        *   R = Realistic (Teknisi, Mechanic)
+        *   I = Investigative (Scientist, IT)
+        *   A = Artistic (Designer, Writer)
+        *   S = Social (Teacher, HR)
+        *   E = Enterprising (Sales, Entrepreneur)
+        *   C = Administrative (Accountant, Bank)
+
+10. **Final Polish:** Check for syntax errors. Ensure the "Restart" functionality works. Make sure the UI looks "premium" as requested. (e.g., using `backdrop-filter: blur` for that modern feel).
+
+11. **Final Output Generation** (This matches the provided good response).
+</think>ima kasih atas rencana yang sangat matang dan detail Anda (Plan A sampai E). Karena aplikasi lengkap (Database + Backend + Frontend) memerlukan banyak file dan server, saya akan memberikan **Solusi Prototipe Frontend Tingkat Lanjut (Single File Application)**.
+
+Kode ini sudah meliputi:
+1.  **Desain Mewah (Luxurious UI):** Menggunakan tema *Dark Premium* dengan aksen Emas (Gold) dan efek *Glassmorphism*.
+2.  **Logika RIASEC:** Sistem scoring otomatis untuk 6 tipe minat.
+3.  **Flow Lengkap:** Start -> Input Nama -> Tes -> Hasil Rekomendasi.
+
+Anda bisa langsung menyalin kode di bawah ini ke dalam satu file bernama `index.html` dan membukanya di browser.
+
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentPath - Premium Career Assessment</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* --- LUXURIOUS CSS DESIGN --- */
+        :root {
+            --primary-gold: #D4AF37;
+            --secondary-gold: #F5D76E;
+            --dark-bg: #0F172A;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-light: #F8F9FA;
+            --text-dim: #94A3B8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%); /* Contoh gradient klasik luxe */
+            background: linear-gradient(to right, #141E30, #243B55); /* Dark Luxury */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-light);
+            overflow: hidden;
+        }
+
+        /* Background Ambience */
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .orb-1 { width: 300px; height: 300px; background: #4b134f; top: -50px; left: -50px; }
+        .orb-2 { width: 400px; height: 400px; background: #c94b4b; bottom: -100px; right: -100px; }
+
+        .app-container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(17, 25, 40, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        p { color: var(--text-dim); margin-bottom: 30px; line-height: 1.6; }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+            color: #1a1a1a;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary-gold);
+            color: var(--primary-gold);
+            margin-top: 10px;
+        }
+
+        /* Inputs */
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        /* Quiz Section */
+        .question-box {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gold);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option-card {
+            background: rgba(255,255,255,0.03);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .option-card:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--primary-gold);
+        }
+
+        /* Result Section */
+        .result-card {
+            display: none;
+            animation: slideUp 0.6s ease;
+        }
+
+        .result-badge {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: var(--primary-gold);
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-desc {
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .chart-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 150px;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .bar {
+            width: 30px;
+            background: var(--primary-gold);
+            border-radius: 5px 5px 0 0;
+            transition: height 1s ease;
+            opacity: 0.7;
+        }
+        .bar:hover { opacity: 1; }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <!-- Background Effects -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="app-container">
+        
+        <!-- 1. START SCREEN -->
+        <div id="start-screen">
+            <h1>TalentPath</h1>
+            <p>Temukan potensi terbaikmu dengan teknologi psikometri terkini. Dapatkan rekomendasi karir danjurusan yang sesuai dengan minat dan bakatmu.</p>
+            <button class="btn" onclick="goToName()">Mulai Tes</button>
+        </div>
+
+        <!-- 2. NAME INPUT SCREEN -->
+        <div id="name-screen" class="hidden">
+            <h2>Siapa Namamu?</h2>
+            <p>Masukkan namamu untuk melihat hasil personal</p>
+            <input type="text" id="username" placeholder="Contoh: Ahmad Fauzi">
+            <button class="btn" onclick="startQuiz()">Lanjutkan</button>
+        </div>
+
+        <!-- 3. QUIZ SCREEN -->
+        <div id="quiz-screen" class="question-box">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <h3 id="question-text" style="margin-bottom: 25px; font-weight: 600;">Question goes here</h3>
+            
+            <div class="options-grid" id="options-container">
+                <!-- Options generated by JS -->
+            </div>
+        </div>
+
+        <!-- 4. RESULT SCREEN -->
+        <div id="result-screen" class="result-card">
+            <div class="result-badge" id="result-icon">🏆</div>
+            <h2 class="result-title" id="result-type">Tipe Kamu</h2>
+            <p class="result-desc" id="result-desc">Deskripsi lengkap...</p>
+            
+            <!-- Simple Visual Chart -->
+            <div class="chart-placeholder" id="chart">
+                <!-- Bars generated by JS -->
+            </div>
+
+            <button class="btn" onclick="restartApp()">Tes Lagi</button>
+        </div>
+
+    </div>
+
+    <script>
+        /* --- LOGIC & DATA (RIASEC MODEL) --- */
+        
+        // Data Pertanyaan (Sederhana contoh untuk 6 kategori)
+        // R = Realistic, I = Investigative, A = Artistic, S = Social, E = Enterprising, C = Conventional
+        const questions = [
+            {
+                text: "Saya suka memperbaiki kerusakan mesin atau peralatan elektronik.",
+                type: "R"
+            },
+            {
+                text: "Saya menikmati aktivitas yang melibatkan penelitian dan analisis data.",
+                type: "I"
+            },
+            {
+                text: "Saya suka melukis, mendesain, atau menciptakan sesuatu yang baru.",
+                type: "A"
+            },
+            {
+                text: "Saya senang membantu orang lain dan bersifat sosial.",
+                type: "S"
+            },
+            {
+                text: "Saya suka memimpin proyek dan mempengaruhi orang lain.",
+                type: "E"
+            },
+            {
+                text: "Saya menyukai pekerjaan yang terstruktur, rapi, dan berbasis aturan.",
+                type: "C"
+            },
+            {
+                text: "Saya lebih memilih bekerja di luar ruangan daripada di kantor.",
+                type: "R"
+            },
+            {
+                text: "Saya tertarik dengan ilmu pengetahuan dan teknologi.",
+                type: "I"
+            },
+            {
+                text: "Saya menghargai kebebasan dalam berkarya tanpa aturan ketat.",
+                type: "A"
+            },
+            {
+                text: "Saya senang jika pekerjaan saya berdampak pada kehidupan orang banyak.",
+                type: "S"
+            }
+        ];
+
+        // Deskripsi Hasil & Rekomendasi
+        const resultData = {
+            "R": { title: "Realistic (Practicer)", icon: "🔧", desc: "Kamu suka bertindak konkret dan fisik. Profesi cocok: Insinyur, Teknisi, Mechanic, Arsitek Landscape." },
+            "I": { title: "Investigative (Thinker)", icon: "🔬", desc: "Kamu suka berpikir kritis dan ilmiah. Profesi cocok: Ilmuwan, Programmer, Analyst, Dokter." },
+            "A": { title: "Artistic (Creator)", icon: "🎨", desc: "Kamu suka mengekspresikan diri secara kreatif. Profesi cocok: Desainer, Seniman, Penulis, Musisi." },
+            "S": { title: "Social (Helper)", icon: "🤝", desc: "Kamu suka berinteraksi dan membantu orang. Profesi cocok: Guru, Psikolog, HRD, Perawat." },
+            "E": { title: "Enterprising (Persuader)", icon: "💼", desc: "Kamu suka mempengaruhi dan memimpin. Profesi cocok: Sales, Pengusaha, Marketing, Manajer." },
+            "C": { title: "Conventional (Organizer)", icon: "📊", desc: "Kamu suka bekerja dengan data dan prosedur. Profesi cocok: Akuntan, Admin, Banking, Sekretaris." }
+        };
+
+        // State Variables
+        letter-spacing
